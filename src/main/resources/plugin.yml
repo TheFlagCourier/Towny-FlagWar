@@ -1,9 +1,0 @@
-name: FlagWar
-version: @version@
-main: io.github.townyadvanced.flagwar.FlagWar
-api-version: @apiVersion@
-prefix: FlagWar
-depend: [ Towny ]
-authors: [ Shade, FuzzeWuzze, ElgarL, LlmDl, FlagCourier ]
-description: The original war system for Towny, now provided as an add-on.
-website: https://townyadvanced.github.io/

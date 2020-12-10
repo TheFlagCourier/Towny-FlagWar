@@ -1,38 +1,68 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'kr.entree.spigradle' version '2.2.3'
+}
 
-apply plugin: 'java'
-
-group = 'io.github.townyadvanced'
+group = 'io.github.townyadvanced.flagwar'
 version = '0.1.0-SNAPSHOT'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+description = 'FlagWar'
+compileJava.options.encoding('UTF-8')
 
 repositories {
+    // Some of these are defined by spigradle
     mavenCentral()
-    maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
-        name = 'jitpack'
-        url = 'https://jitpack.io/'
-    }
+    sonatype()
+    spigotmc()
+    codemc() // bstats (unused for now)
+    jitpack() // Towny
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly spigot("1.16.4")
     compileOnly 'com.github.TownyAdvanced:Towny:0.96.5.4'
-    annotationProcessor 'org.jetbrains:annotations:16.0.2'
+    //testImplementation group: 'junit', name: 'junit', version: '4.12'
+    //testImplementation mockBukkit()
 }
 
-processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [version: version]
-        filter ReplaceTokens, tokens: [apiVersion: "1.14"]
+spigot {
+    // Builds the plugin.yml dynamically.
+    authors 'Shade, FuzzeWuzze, ElgarL, LlmDl, FlagCourier'
+    description 'The original war system for Towny, now provided as an add-on.'
+    depends 'Towny'
+    load POSTWORLD
+    apiVersion '1.14'
+    commands {
+        /* Example
+        give {
+            aliases 'giv', 'i'
+            description 'Give command.'
+            permission 'test.foo'
+            permissionMessage 'You do not have the permission!'
+            usage '/<command> [item] [amount]'
+        }
+         */
+    }
+    permissions {
+        /* Example
+        'test.foo' {
+            description 'Allows foo command'
+            defaults 'true'
+        }
+        'test.*' {
+            description 'Wildcard permission'
+            defaults 'op'
+            children = ['test.foo': true]
+        }
+         */
     }
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+    withJavadocJar()
+}
+
+
