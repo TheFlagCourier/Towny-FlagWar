@@ -1,10 +1,9 @@
 package io.github.townyadvanced.flagwar;
 
+import com.palmergames.bukkit.towny.object.Coord;
 import io.github.townyadvanced.flagwar.CellUnderAttack;
 import io.github.townyadvanced.flagwar.FlagWar;
 import org.bukkit.Location;
-
-import com.palmergames.bukkit.towny.object.Coord;
 
 public class Cell {
 

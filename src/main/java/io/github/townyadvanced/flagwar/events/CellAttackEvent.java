@@ -1,14 +1,13 @@
 package io.github.townyadvanced.flagwar.events;
 
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.towny.Towny;
+import io.github.townyadvanced.flagwar.CellUnderAttack;
+import io.github.townyadvanced.flagwar.FlagWarConfig;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import com.palmergames.bukkit.towny.Towny;
-import io.github.townyadvanced.flagwar.CellUnderAttack;
 
 public class CellAttackEvent extends Event implements Cancellable {
 

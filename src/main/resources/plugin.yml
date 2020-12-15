@@ -1,0 +1,26 @@
+name: FlagWar
+version: 0.1.0-SNAPSHOT
+api-version: 1.16
+description: The original war system for Towny.
+website: https://townyadvanced.github.io/
+
+authors:
+  - 'Chris Holland (Shade)'
+  - 'FuzzeWuzze'
+  - 'ElgarL'
+  - 'LlmDl'
+  - 'FlagCourier'
+
+main: io.github.townyadvanced.flagwar.FlagWar
+load: POSTWORLD
+
+depend:
+  - Towny
+
+softdepend:
+  - TownyChat
+
+loadbefore:
+  - TownyGUI
+
+

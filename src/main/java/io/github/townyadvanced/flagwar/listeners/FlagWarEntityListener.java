@@ -1,12 +1,11 @@
 package io.github.townyadvanced.flagwar.listeners;
 
+import io.github.townyadvanced.flagwar.FlagWar;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
-import io.github.townyadvanced.flagwar.FlagWar;
 
 public class FlagWarEntityListener implements Listener {
 

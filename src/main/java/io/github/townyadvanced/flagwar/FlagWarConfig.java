@@ -3,13 +3,12 @@ package io.github.townyadvanced.flagwar;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
 public class FlagWarConfig {
 
-	public static final Material[] woolColors = new Material[] {
+	protected static final Material[] woolColors = new Material[] {
 			Material.LIME_WOOL, Material.GREEN_WOOL, Material.BLUE_WOOL, Material.CYAN_WOOL,
 			Material.LIGHT_BLUE_WOOL, Material.GRAY_WOOL, Material.WHITE_WOOL,
 			Material.PINK_WOOL, Material.ORANGE_WOOL, Material.RED_WOOL };
@@ -17,6 +16,10 @@ public class FlagWarConfig {
 	private static Material flagBaseMaterial = null;
 	private static Material flagLightMaterial = null;
 	private static Material beaconWireFrameMaterial = null;
+
+	private FlagWarConfig() {
+		// Utility class, mask implicit public constructor
+	}
 
 	public static boolean isAffectedMaterial(Material material) {
 
@@ -36,11 +39,6 @@ public class FlagWarConfig {
 	public static long getFlagWaitingTime() {
 
 		return TimeTools.convertToTicks(TownySettings.getSeconds(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
-	}
-
-	public static long getTimeBetweenFlagColorChange() {
-
-		return getFlagWaitingTime() / getWoolColors().length;
 	}
 
 	public static boolean isDrawingBeacon() {

@@ -1,66 +1,43 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'maven-publish'
-    id 'kr.entree.spigradle' version '2.2.3' //https://github.com/spigradle/spigradle
-    id 'com.github.johnrengelman.shadow' version '6.1.0' //https://imperceptiblethoughts.com/shadow
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 group = 'io.github.townyadvanced.flagwar'
 version = '0.1.0-SNAPSHOT'
 description = 'FlagWar'
-compileJava.options.encoding('UTF-8')
 
 repositories {
     mavenCentral()
-    sonatype() //Spigot (Spigradle)
-    spigotmc() //Spigot (Spigradle)
-    codemc() //bstats (Spigradle)
-    jitpack() //Towny (Spigradle)
+    maven {
+        name = 'Sonatype OpenSource Snapshot Repository'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
+        name = 'SpigotMC Snapshot Repository'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'CodeMC Maven Public Repository'
+        url = 'https://repo.codemc.org/repository/maven-public/'
+    }
+    maven {
+        name = 'Jatpack.io On-Demand Repository'
+        url = 'https://jitpack.io/'
+    }
 }
 
 dependencies {
-    compileOnly spigot("1.16.4")
-    compileOnly 'com.github.TownyAdvanced:Towny:0.96.5.4'
-    compile 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    compile 'org.apache.logging.log4j:log4j-api:2.14.0'
-    compile 'org.apache.logging.log4j:log4j-core:2.14.0'
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'com.github.TownyAdvanced:Towny:0.96.5.6'
+    compileOnly 'com.github.simplix-softworks:SimplixStorage:3.2.0'
 }
 
-test {
-    useJUnitPlatform()
-}
-
-spigot {
-    // Builds the plugin.yml dynamically.
-    authors 'Shade, FuzzeWuzze, ElgarL, LlmDl, FlagCourier'
-    description 'The original war system for Towny, now provided as an add-on.'
-    depends 'Towny'
-    load POSTWORLD
-    apiVersion '1.14'
-    commands {
-        /* Example
-        give {
-            aliases 'giv', 'i'
-            description 'Give command.'
-            permission 'test.foo'
-            permissionMessage 'You do not have the permission!'
-            usage '/<command> [item] [amount]'
-        }
-         */
-    }
-    permissions {
-        /* Example
-        'test.foo' {
-            description 'Allows foo command'
-            defaults 'true'
-        }
-        'test.*' {
-            description 'Wildcard permission'
-            defaults 'op'
-            children = ['test.foo': true]
-        }
-         */
-    }
+compileJava {
+    options.release = 11
+    options.encoding('UTF-8')
 }
 
 java {
@@ -68,6 +45,17 @@ java {
         languageVersion = JavaLanguageVersion.of(11)
     }
     withJavadocJar()
+}
+
+shadowJar {
+    relocate 'de.leonhard.storage', 'io.github.townyadvanced.flagwar.libs.simplixstorage'
+    minimize()
+}
+
+// Ensure Gradle builds the jars the same for anyone pulling.
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
 
 

@@ -1,17 +1,12 @@
 package io.github.townyadvanced.flagwar;
 
-import io.github.townyadvanced.flagwar.Cell;
-import io.github.townyadvanced.flagwar.CellAttackThread;
-import io.github.townyadvanced.flagwar.FlagWarConfig;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.object.Coord;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.object.Coord;
 
 public class CellUnderAttack extends Cell {
 
@@ -23,21 +18,6 @@ public class CellUnderAttack extends Cell {
 	private int flagColorId;
 	private int thread;
 	private long timeBetweenColorChange;
-
-	/**
-	 * Old CellUnderAttack class constructor, marked for eventual removal.
-	 * 
-	 * @param plugin Instance of {@link Towny}
-	 * @param nameOfFlagOwner Name of the Resident that placed the flag
-	 * @param flagBaseBlock Flag representing the "flag pole" of the block
-	 * 
-	 * @deprecated To be removed in a future release of Towny. Please transition to using {@link #CellUnderAttack(Towny, String, Block, long)}.   
-	 */
-	@Deprecated
-	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {
-		this(plugin, nameOfFlagOwner, flagBaseBlock, io.github.townyadvanced.flagwar.FlagWarConfig
-        .getTimeBetweenFlagColorChange());
-	}
 
 	/**
 	 * CellUnderAttack class constructor
@@ -68,10 +48,10 @@ public class CellUnderAttack extends Cell {
 		beaconFlagBlocks = new ArrayList<Block>();
 		beaconWireframeBlocks = new ArrayList<Block>();
 
-		if (!io.github.townyadvanced.flagwar.FlagWarConfig.isDrawingBeacon())
+		if (!FlagWarConfig.isDrawingBeacon())
 			return;
 
-		int beaconSize = io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconSize();
+		int beaconSize = FlagWarConfig.getBeaconSize();
 		if (Coord.getCellSize() < beaconSize)
 			return;
 
@@ -80,10 +60,15 @@ public class CellUnderAttack extends Cell {
 			return;
 
 		int outerEdge = beaconSize - 1;
+		beaconLooper(beaconSize, minBlock, outerEdge);
+	}
+
+	private void beaconLooper(int beaconSize, Block minBlock, int outerEdge) {
 		for (int y = 0; y < beaconSize; y++) {
 			for (int z = 0; z < beaconSize; z++) {
 				for (int x = 0; x < beaconSize; x++) {
-					Block block = flagBaseBlock.getWorld().getBlockAt(minBlock.getX() + x, minBlock.getY() + y, minBlock.getZ() + z);
+					Block block = flagBaseBlock.getWorld().getBlockAt(minBlock.getX() + x, minBlock.getY() + y, minBlock
+							.getZ() + z);
 					if (block.isEmpty()) {
 						int edgeCount = getEdgeCount(x, y, z, outerEdge);
 						if (edgeCount == 1) {
@@ -104,7 +89,7 @@ public class CellUnderAttack extends Cell {
 
 	private int getMinimumHeightForBeacon() {
 
-		return getTopOfFlagBlock().getY() + io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconMinHeightAboveFlag();
+		return getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMinHeightAboveFlag();
 	}
 
 	private int getEdgeCount(int x, int y, int z, int outerEdge) {
@@ -120,16 +105,16 @@ public class CellUnderAttack extends Cell {
 	private Block getBeaconMinBlock(World world) {
 
 		int middle = (int) Math.floor(Coord.getCellSize() / 2.0);
-		int radiusCenterExpansion = io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconRadius() - 1;
+		int radiusCenterExpansion = FlagWarConfig.getBeaconRadius() - 1;
 		int fromCorner = middle - radiusCenterExpansion;
 
 		int x = (getX() * Coord.getCellSize()) + fromCorner;
 		int z = (getZ() * Coord.getCellSize()) + fromCorner;
 
 		int maxY = world.getMaxHeight();
-		int y = getTopOfFlagBlock().getY() + io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconMaxHeightAboveFlag();
+		int y = getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMaxHeightAboveFlag();
 		if (y > maxY) {
-			y = maxY - io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconSize();
+			y = maxY - FlagWarConfig.getBeaconSize();
 		}
 
 		return world.getBlockAt(x, y, z);
@@ -147,7 +132,7 @@ public class CellUnderAttack extends Cell {
 
 	public boolean hasEnded() {
 
-		return flagColorId >= io.github.townyadvanced.flagwar.FlagWarConfig.getWoolColors().length;
+		return flagColorId >= FlagWarConfig.getWoolColors().length;
 	}
 
 	public void changeFlag() {
@@ -160,11 +145,11 @@ public class CellUnderAttack extends Cell {
 
 		loadBeacon();
 
-		flagBaseBlock.setType(io.github.townyadvanced.flagwar.FlagWarConfig.getFlagBaseMaterial());
+		flagBaseBlock.setType(FlagWarConfig.getFlagBaseMaterial());
 		updateFlag();
-		flagLightBlock.setType(io.github.townyadvanced.flagwar.FlagWarConfig.getFlagLightMaterial());
+		flagLightBlock.setType(FlagWarConfig.getFlagLightMaterial());
 		for (Block block : beaconWireframeBlocks)
-			block.setType(io.github.townyadvanced.flagwar.FlagWarConfig.getBeaconWireFrameMaterial());
+			block.setType(FlagWarConfig.getBeaconWireFrameMaterial());
 	}
 
 	public void updateFlag() {
