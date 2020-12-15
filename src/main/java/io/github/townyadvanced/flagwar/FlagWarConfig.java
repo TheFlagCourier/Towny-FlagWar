@@ -37,11 +37,6 @@ public class FlagWarConfig {
 		return TimeTools.convertToTicks(TownySettings.getSeconds(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
 	}
 
-	public static long getTimeBetweenFlagColorChange() {
-
-		return getFlagWaitingTime() / getWoolColors().length;
-	}
-
 	public static boolean isDrawingBeacon() {
 
 		return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_BEACON_DRAW);

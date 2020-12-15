@@ -2,9 +2,6 @@ package io.github.townyadvanced.flagwar;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
-import io.github.townyadvanced.flagwar.Cell;
-import io.github.townyadvanced.flagwar.CellAttackThread;
-import io.github.townyadvanced.flagwar.FlagWarConfig;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -21,20 +18,6 @@ public class CellUnderAttack extends Cell {
 	private int flagColorId;
 	private int thread;
 	private long timeBetweenColorChange;
-
-	/**
-	 * Old CellUnderAttack class constructor, marked for eventual removal.
-	 * 
-	 * @param plugin Instance of {@link Towny}
-	 * @param nameOfFlagOwner Name of the Resident that placed the flag
-	 * @param flagBaseBlock Flag representing the "flag pole" of the block
-	 * 
-	 * @deprecated To be removed in a future release of Towny. Please transition to using {@link #CellUnderAttack(Towny, String, Block, long)}.   
-	 */
-	@Deprecated
-	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {
-		this(plugin, nameOfFlagOwner, flagBaseBlock, FlagWarConfig.getTimeBetweenFlagColorChange());
-	}
 
 	/**
 	 * CellUnderAttack class constructor
@@ -77,10 +60,15 @@ public class CellUnderAttack extends Cell {
 			return;
 
 		int outerEdge = beaconSize - 1;
+		beaconLooper(beaconSize, minBlock, outerEdge);
+	}
+
+	private void beaconLooper(int beaconSize, Block minBlock, int outerEdge) {
 		for (int y = 0; y < beaconSize; y++) {
 			for (int z = 0; z < beaconSize; z++) {
 				for (int x = 0; x < beaconSize; x++) {
-					Block block = flagBaseBlock.getWorld().getBlockAt(minBlock.getX() + x, minBlock.getY() + y, minBlock.getZ() + z);
+					Block block = flagBaseBlock.getWorld().getBlockAt(minBlock.getX() + x, minBlock.getY() + y, minBlock
+							.getZ() + z);
 					if (block.isEmpty()) {
 						int edgeCount = getEdgeCount(x, y, z, outerEdge);
 						if (edgeCount == 1) {
