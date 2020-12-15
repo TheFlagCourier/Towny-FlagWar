@@ -56,13 +56,17 @@ public class FlagWar extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
-		//Initialize Maps
-		setMaps();
+		//initialize configuration
+		//TODO: Initialize Configuration
 
 		//Initialize Locale
 		Localization localization = new Localization("en-US");
 		localization.setDefaults();
+
+		//Initialize Maps
+		setMaps();
+
+		//TODO: loadWarMaterialsList()
 
 		//Register Listeners
 		registerEvents();

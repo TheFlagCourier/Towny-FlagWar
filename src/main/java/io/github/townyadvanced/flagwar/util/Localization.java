@@ -17,6 +17,9 @@ public class Localization {
     this.lang = new Toml(langChoice, "languages");
   }
 
+  /**
+   * Generates the language keys for the given language. (We generate en-US.)
+   */
   public void setDefaults(){
     lang.setDefault("plugin_name", "Flag War");
     lang.setDefault("language", lang.getName());
