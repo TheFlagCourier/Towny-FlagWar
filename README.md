@@ -2,7 +2,7 @@
 
 ## About _Flag&nbsp;War_
 
-_Flag&nbsp;War_ is a TownyAdvanced project, and was formerly included within the main plugin.
+_Flag&nbsp;War_ is a TownyAdvanced project, and was formerly included within the main plugin, _Towny_.
 
 (It still is, at present. This repository is an unadvertised work-in-progress. Note: Until this is
 committed upstream to the TownyAdvanced group, no binaries will be offered.)
@@ -41,13 +41,15 @@ why we use it.
 
 ## Changes from upstream:
 - Uses the Gradle build system over Apache Maven
-  - Gradle can handle 99.9% of Maven tasks
-  - It's super-fast.
+  - Gradle can handle most Maven tasks.
+  - While first run may be slow, it is _super-fast_ on sequential runs.
   
-- Handles it's own configuration via libraries. (See Third-Party Licenses.)
+- _FlagWar_ handles its own configuration and localization, via SimplixStorage, rather than depending on Towny's
+  integrated configuration system.
 
 - Development targets Java 11.
-  - Most servers are capable of running Java 11, which is also a requirement for _Paper_ starting
-    with _Minecraft_ 1.17
-    
-  - If your host does not support Java 11, simply ask them if it's on their roadmap.
+  - This is in line with PaperMC and Velocity's build targets starting with Minecraft 1.17. 
+  - Dedicated servers are fully capable of running on JDK 11, with packages in most major Linux distributions.
+  - Hosting Platforms / Shared Hosts
+    - Some hosts already support Java 11 Runtimes, but you may have to open a ticket.
+    - Most hosts should follow after the update to 1.17, PaperMC is working directly with Pterodactyl panel to add support.
