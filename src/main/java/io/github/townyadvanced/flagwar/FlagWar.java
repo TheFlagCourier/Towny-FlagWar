@@ -2,6 +2,7 @@ package io.github.townyadvanced.flagwar;
 
 import static org.bukkit.Bukkit.getPluginManager;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -108,6 +110,15 @@ public class FlagWar extends JavaPlugin {
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
 		cell.begin();
+	}
+
+	private static void loadWarMaterialsList() {
+		// TODO: Call after loading configuration successfully.
+		// TODO: Also, use the new configuration type. Until then, these are useless.
+		FlagWarConfig.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
+		FlagWarConfig.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
+		FlagWarConfig.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
+
 	}
 
 	/**
