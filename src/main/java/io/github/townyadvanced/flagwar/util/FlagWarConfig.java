@@ -1,4 +1,4 @@
-package io.github.townyadvanced.flagwar;
+package io.github.townyadvanced.flagwar.util;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;

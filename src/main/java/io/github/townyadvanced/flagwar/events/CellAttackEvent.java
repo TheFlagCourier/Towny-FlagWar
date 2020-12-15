@@ -2,7 +2,7 @@ package io.github.townyadvanced.flagwar.events;
 
 import com.palmergames.bukkit.towny.Towny;
 import io.github.townyadvanced.flagwar.CellUnderAttack;
-import io.github.townyadvanced.flagwar.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.FlagWarConfig;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

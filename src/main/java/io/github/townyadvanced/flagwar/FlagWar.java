@@ -27,6 +27,7 @@ import io.github.townyadvanced.flagwar.events.CellWonEvent;
 import io.github.townyadvanced.flagwar.listeners.FlagWarBlockListener;
 import io.github.townyadvanced.flagwar.listeners.FlagWarCustomListener;
 import io.github.townyadvanced.flagwar.listeners.FlagWarEntityListener;
+import io.github.townyadvanced.flagwar.util.FlagWarConfig;
 import io.github.townyadvanced.flagwar.util.Localization;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +82,7 @@ public class FlagWar extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-	
+
 		try {
 			for (io.github.townyadvanced.flagwar.CellUnderAttack cell : new ArrayList<>(cellsUnderAttack.values())) {
 				attackCanceled(cell);
@@ -116,18 +117,21 @@ public class FlagWar extends JavaPlugin {
 		cell.begin();
 	}
 
+	/*
+	 * TODO: Use the new configuration type. Until then, these are useless.
 	private static void loadWarMaterialsList() {
 		// TODO: Call after loading configuration successfully.
-		// TODO: Also, use the new configuration type. Until then, these are useless.
+
 		FlagWarConfig.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
 		FlagWarConfig.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
 		FlagWarConfig.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
 
 	}
+	*/
 
 	/**
 	 * Get the number of flags actively owned by the specified player.
-	 * 
+	 *
 	 * @param playerName the name of the player
 	 * @return the number of flags active
 	 */
@@ -139,7 +143,7 @@ public class FlagWar extends JavaPlugin {
 
 	/**
 	 * Get all cells currently under attack
-	 * 
+	 *
 	 * @return all the cells currently under attack
 	 */
 	public static List<io.github.townyadvanced.flagwar.CellUnderAttack> getCellsUnderAttack() {
@@ -148,7 +152,7 @@ public class FlagWar extends JavaPlugin {
 
 	/**
 	 * Get all cells currently under attack in the specified town
-	 * 
+	 *
 	 * @param town the town to get cells under attack
 	 * @return the cells under attack
 	 */
@@ -169,7 +173,7 @@ public class FlagWar extends JavaPlugin {
 		}
 		return cells;
 	}
-	
+
 	public static boolean isUnderAttack(Town town) {
 		for(io.github.townyadvanced.flagwar.CellUnderAttack cua : cellsUnderAttack.values()) {
 			try {
@@ -298,10 +302,10 @@ public class FlagWar extends JavaPlugin {
 		TownBlock townBlock;
 
 		attackingResident = townyUniverse.getResident(player.getUniqueId());
-		
+
 		if (attackingResident == null || !attackingResident.hasNation())
 			throw new TownyException(Translation.of("msg_err_dont_belong_nation"));
-		
+
 		try {
 			attackingTown = attackingResident.getTown();
 			attackingNation = attackingTown.getNation();
@@ -309,7 +313,7 @@ public class FlagWar extends JavaPlugin {
 			// Can never happen
 			return false;
 		}
-		
+
 		if (attackingTown.getTownBlocks().isEmpty())
 			throw new TownyException(Translation.of("msg_err_enemy_war_your_town_has_no_claims"));
 

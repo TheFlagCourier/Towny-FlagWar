@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.townyadvanced.flagwar.util.FlagWarConfig;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
