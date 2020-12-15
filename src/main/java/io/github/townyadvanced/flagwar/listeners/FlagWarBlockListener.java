@@ -1,5 +1,13 @@
 package io.github.townyadvanced.flagwar.listeners;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import io.github.townyadvanced.flagwar.FlagWar;
+import io.github.townyadvanced.flagwar.FlagWarConfig;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,22 +18,13 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
-import io.github.townyadvanced.flagwar.FlagWar;
-import io.github.townyadvanced.flagwar.FlagWarConfig;
-
 public class FlagWarBlockListener implements Listener {
 	
-	private Towny plugin;
+	private Towny towny;
 	
-	public FlagWarBlockListener(Towny plugin) {	
+	public FlagWarBlockListener(Towny towny) {
 
-		this.plugin = plugin;	
+		this.towny = towny;
 	}
 
 	@EventHandler (priority=EventPriority.HIGH)
@@ -39,9 +38,9 @@ public class FlagWarBlockListener implements Listener {
 		Block block = player.getWorld().getBlockAt(event.getLocation());
 		WorldCoord worldCoord = new WorldCoord(block.getWorld().getName(), Coord.parseCoord(block));
 		
-		if (plugin.getCache(player).getStatus() == TownBlockStatus.ENEMY) 
+		if (towny.getCache(player).getStatus() == TownBlockStatus.ENEMY)
 			try {
-				if (FlagWar.callAttackCellEvent(plugin, player, block, worldCoord))
+				if (FlagWar.callAttackCellEvent(towny, player, block, worldCoord))
 					event.setCancelled(false);
 			} catch (TownyException e) {
 				event.setMessage(e.getMessage());

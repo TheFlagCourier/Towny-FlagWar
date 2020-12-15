@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 public class CellAttackThread extends TimerTask {
 
-	io.github.townyadvanced.flagwar.CellUnderAttack cell;
+	CellUnderAttack cell;
 
 	public CellAttackThread(CellUnderAttack cellUnderAttack) {
 

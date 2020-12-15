@@ -3,7 +3,6 @@ package io.github.townyadvanced.flagwar;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 

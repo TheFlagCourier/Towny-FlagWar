@@ -1,10 +1,9 @@
 package io.github.townyadvanced.flagwar.events;
 
+import io.github.townyadvanced.flagwar.CellUnderAttack;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import io.github.townyadvanced.flagwar.CellUnderAttack;
 
 public class CellWonEvent extends Event implements Cancellable {
 
