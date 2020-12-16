@@ -1,6 +1,6 @@
-# _Flag&nbsp;War_
+# _Flag War_
 
-## About _Flag&nbsp;War_
+## About _Flag War_
 
 _Flag&nbsp;War_ is a TownyAdvanced project, and was formerly included within the main plugin, _Towny_.
 
@@ -19,7 +19,7 @@ _Flag&nbsp;War_'s legacy code from _Towny_ proper.
 
 ## License and Redistribution
 
-### _Flag&nbsp;War_ License
+### _Flag War_ License
 
 _Flag&nbsp;War_ is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0)](https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode) license.
 Additionally, those forking the project publicly in source-code format are licensed to do so, so
