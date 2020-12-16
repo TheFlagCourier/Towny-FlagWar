@@ -2,7 +2,6 @@ package io.github.townyadvanced.flagwar;
 
 import static org.bukkit.Bukkit.getPluginManager;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -27,14 +26,14 @@ import io.github.townyadvanced.flagwar.events.CellWonEvent;
 import io.github.townyadvanced.flagwar.listeners.FlagWarBlockListener;
 import io.github.townyadvanced.flagwar.listeners.FlagWarCustomListener;
 import io.github.townyadvanced.flagwar.listeners.FlagWarEntityListener;
-import io.github.townyadvanced.flagwar.util.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.Configuration;
 import io.github.townyadvanced.flagwar.util.Localization;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Material;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -109,8 +108,8 @@ public class FlagWar extends JavaPlugin {
 
 		// Check that the user is under his limit of active warflags.
 		int futureActiveFlagCount = getNumActiveFlags(playerName) + 1;
-		if (futureActiveFlagCount > FlagWarConfig.getMaxActiveFlagsPerPerson())
-			throw new TownyException(Translation.of("msg_err_enemy_war_reached_max_active_flags", FlagWarConfig.getMaxActiveFlagsPerPerson()));
+		if (futureActiveFlagCount > Configuration.getMaxActiveFlagsPerPerson())
+			throw new TownyException(Translation.of("msg_err_enemy_war_reached_max_active_flags", Configuration.getMaxActiveFlagsPerPerson()));
 
 		addFlagToPlayerCount(playerName, cell);
 		cellsUnderAttack.put(cell, cell);
@@ -122,9 +121,9 @@ public class FlagWar extends JavaPlugin {
 	private static void loadWarMaterialsList() {
 		// TODO: Call after loading configuration successfully.
 
-		FlagWarConfig.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
-		FlagWarConfig.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
-		FlagWarConfig.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
+		Configuration.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
+		Configuration.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
+		Configuration.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
 
 	}
 	*/
@@ -274,7 +273,7 @@ public class FlagWar extends JavaPlugin {
 
 	public static void checkBlock(Player player, Block block, Cancellable event) {
 
-		if (FlagWarConfig.isAffectedMaterial(block.getType())) {
+		if (Configuration.isAffectedMaterial(block.getType())) {
 			Cell cell = Cell.parse(block.getLocation());
 			if (cell.isUnderAttack()) {
 				CellUnderAttack cellAttackData = cell.getAttackData();
@@ -338,11 +337,11 @@ public class FlagWar extends JavaPlugin {
 		checkIfNationHasMinOnlineForWar(attackingNation);
 
 		// Check that attack takes place on the edge of a town
-		if (FlagWarConfig.isAttackingBordersOnly() && !AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
+		if (Configuration.isAttackingBordersOnly() && !AreaSelectionUtil.isOnEdgeOfOwnership(landOwnerTown, worldCoord))
 			throw new TownyException(Translation.of("msg_err_enemy_war_not_on_edge_of_town"));
 
 		// Check that the user can pay for the warflag + fines from losing/winning.
-		double costToPlaceWarFlag = FlagWarConfig.getCostToPlaceWarFlag();
+		double costToPlaceWarFlag = Configuration.getCostToPlaceWarFlag();
 		if (TownySettings.isUsingEconomy()) {
 			try {
 				double requiredAmount = costToPlaceWarFlag;
@@ -354,13 +353,13 @@ public class FlagWar extends JavaPlugin {
 
 				// Check that the user can pay the fines from losing/winning all future warflags.
 				int activeFlagCount = getNumActiveFlags(attackingResident.getName());
-				double defendedAttackCost = FlagWarConfig.getDefendedAttackReward() * (activeFlagCount + 1);
+				double defendedAttackCost = Configuration.getDefendedAttackReward() * (activeFlagCount + 1);
 				double attackWinCost = 0;
 
 				double amount;
-				amount = FlagWarConfig.getWonHomeblockReward();
+				amount = Configuration.getWonHomeblockReward();
 				double homeBlockFine = amount < 0 ? -amount : 0;
-				amount = FlagWarConfig.getWonTownblockReward();
+				amount = Configuration.getWonTownblockReward();
 				double townBlockFine = amount < 0 ? -amount : 0;
 
 				// Assume rest of attacks are townblocks.
@@ -438,7 +437,7 @@ public class FlagWar extends JavaPlugin {
 
 	public static void checkIfTownHasMinOnlineForWar(Town town) throws TownyException {
 
-		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInTownForWar();
+		int requiredOnline = Configuration.getMinPlayersOnlineInTownForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(town).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(Translation.of("msg_err_enemy_war_require_online", requiredOnline, town.getFormattedName()));
@@ -446,7 +445,7 @@ public class FlagWar extends JavaPlugin {
 
 	public static void checkIfNationHasMinOnlineForWar(Nation nation) throws TownyException {
 
-		int requiredOnline = FlagWarConfig.getMinPlayersOnlineInNationForWar();
+		int requiredOnline = Configuration.getMinPlayersOnlineInNationForWar();
 		int onlinePlayerCount = TownyAPI.getInstance().getOnlinePlayers(nation).size();
 		if (onlinePlayerCount < requiredOnline)
 			throw new TownyException(Translation.of("msg_err_enemy_war_require_online", requiredOnline, nation.getFormattedName()));

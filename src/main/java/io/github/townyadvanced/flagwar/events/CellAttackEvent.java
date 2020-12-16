@@ -2,7 +2,7 @@ package io.github.townyadvanced.flagwar.events;
 
 import com.palmergames.bukkit.towny.Towny;
 import io.github.townyadvanced.flagwar.CellUnderAttack;
-import io.github.townyadvanced.flagwar.util.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.Configuration;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -39,7 +39,7 @@ public class CellAttackEvent extends Event implements Cancellable {
 		this.plugin = plugin;
 		this.player = player;
 		this.flagBaseBlock = flagBaseBlock;
-		this.time = FlagWarConfig.getFlagWaitingTime();
+		this.time = Configuration.getFlagWaitingTime();
 	}
 
 	public Player getPlayer() {

@@ -6,7 +6,7 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
-public class FlagWarConfig {
+public class Configuration {
 
 	protected static final Material[] woolColors = new Material[] {
 			Material.LIME_WOOL, Material.GREEN_WOOL, Material.BLUE_WOOL, Material.CYAN_WOOL,
@@ -17,7 +17,7 @@ public class FlagWarConfig {
 	private static Material flagLightMaterial = null;
 	private static Material beaconWireFrameMaterial = null;
 
-	private FlagWarConfig() {
+	private Configuration() {
 		// Utility class, mask implicit public constructor
 	}
 
@@ -88,17 +88,17 @@ public class FlagWarConfig {
 
 	public static void setFlagBaseMaterial(Material flagBaseMaterial) {
 
-		FlagWarConfig.flagBaseMaterial = flagBaseMaterial;
+		Configuration.flagBaseMaterial = flagBaseMaterial;
 	}
 
 	public static void setFlagLightMaterial(Material flagLightMaterial) {
 
-		FlagWarConfig.flagLightMaterial = flagLightMaterial;
+		Configuration.flagLightMaterial = flagLightMaterial;
 	}
 
 	public static void setBeaconWireFrameMaterial(Material beaconWireFrameMaterial) {
 
-		FlagWarConfig.beaconWireFrameMaterial = beaconWireFrameMaterial;
+		Configuration.beaconWireFrameMaterial = beaconWireFrameMaterial;
 	}
 
 	public static int getMinPlayersOnlineInTownForWar() {

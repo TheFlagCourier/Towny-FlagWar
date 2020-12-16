@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import io.github.townyadvanced.flagwar.FlagWar;
-import io.github.townyadvanced.flagwar.util.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.Configuration;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +32,7 @@ public class FlagWarBlockListener implements Listener {
 		if (event.getTownBlock() == null)
 			return;
 		
-		if (!(FlagWarConfig.isAllowingAttacks() && event.getMaterial() == FlagWarConfig.getFlagBaseMaterial()))
+		if (!(Configuration.isAllowingAttacks() && event.getMaterial() == Configuration.getFlagBaseMaterial()))
 			return;
 		Player player = event.getPlayer();
 		Block block = player.getWorld().getBlockAt(event.getLocation());

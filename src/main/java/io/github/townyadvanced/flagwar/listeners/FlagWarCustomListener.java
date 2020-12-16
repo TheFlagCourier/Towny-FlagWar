@@ -24,7 +24,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import io.github.townyadvanced.flagwar.CellUnderAttack;
 import io.github.townyadvanced.flagwar.FlagWar;
-import io.github.townyadvanced.flagwar.util.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.Configuration;
 import io.github.townyadvanced.flagwar.events.CellAttackCanceledEvent;
 import io.github.townyadvanced.flagwar.events.CellAttackEvent;
 import io.github.townyadvanced.flagwar.events.CellDefendedEvent;
@@ -105,15 +105,15 @@ public class FlagWarCustomListener implements Listener {
 					defendingPlayer = universe.getResident(player.getUniqueId());
 				}
 
-				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
+				String formattedMoney = TownyEconomyHandler.getFormattedBalance(Configuration.getDefendedAttackReward());
 				if (defendingPlayer == null) {
-					if (attackingPlayer.getAccount().deposit(FlagWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
+					if (attackingPlayer.getAccount().deposit(Configuration.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
 						} catch (TownyException ignored) {
 						}
 				} else {
-					if (attackingPlayer.getAccount().payTo(FlagWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
+					if (attackingPlayer.getAccount().payTo(Configuration.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
 							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_attacker", defendingPlayer.getFormattedName(), formattedMoney));
 						} catch (TownyException ignored) {
@@ -164,10 +164,10 @@ public class FlagWarCustomListener implements Listener {
 				try {
 					String reasonType;
 					if (townBlock.isHomeBlock()) {
-						amount = FlagWarConfig.getWonHomeblockReward();
+						amount = Configuration.getWonHomeblockReward();
 						reasonType = "Homeblock";
 					} else {
-						amount = FlagWarConfig.getWonTownblockReward();
+						amount = Configuration.getWonTownblockReward();
 						reasonType = "Townblock";
 					}
 
@@ -197,7 +197,7 @@ public class FlagWarCustomListener implements Listener {
 			}
 
 			// Defender loses townblock
-			if (FlagWarConfig.isFlaggedTownblockTransfered()) {
+			if (Configuration.isFlaggedTownblockTransfered()) {
 				// Attacker Claim Automatically
 				try {
 					townBlock.setTown(attackingTown);
@@ -257,7 +257,7 @@ public class FlagWarCustomListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownLeaveNation(NationPreTownLeaveEvent event) {
-		if (FlagWarConfig.isAllowingAttacks()) {
+		if (Configuration.isAllowingAttacks()) {
 			if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
 				event.setCancelled(true);
@@ -272,7 +272,7 @@ public class FlagWarCustomListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onNationWithdraw(NationPreTransactionEvent event) {
-		if (FlagWarConfig.isAllowingAttacks() && TownySettings.isFlaggedInteractionNation() && event.getTransaction().getType() == TransactionType.WITHDRAW) {
+		if (Configuration.isAllowingAttacks() && TownySettings.isFlaggedInteractionNation() && event.getTransaction().getType() == TransactionType.WITHDRAW) {
 			for (Town town : event.getNation().getTowns()) {
 				if (FlagWar.isUnderAttack(town) || System.currentTimeMillis()- FlagWar.lastFlagged(town) < TownySettings.timeToWaitAfterFlag()) {
 					event.setCancelMessage(Translation.of("msg_war_flag_deny_nation_under_attack"));
@@ -285,7 +285,7 @@ public class FlagWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownWithdraw(TownPreTransactionEvent event) {
-		if (FlagWarConfig.isAllowingAttacks() && System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
+		if (Configuration.isAllowingAttacks() && System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 			event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 			event.setCancelled(true);
 		}
@@ -293,7 +293,7 @@ public class FlagWarCustomListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownSetHomeBlock(TownPreSetHomeBlockEvent event) {
-		if (FlagWarConfig.isAllowingAttacks()) {
+		if (Configuration.isAllowingAttacks()) {
 			if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
 				event.setCancelled(true);
@@ -311,7 +311,7 @@ public class FlagWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
-		if (FlagWarConfig.isAllowingAttacks()) {
+		if (Configuration.isAllowingAttacks()) {
 			if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
 				event.setCancelled(true);
 				event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
@@ -325,7 +325,7 @@ public class FlagWarCustomListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownLeave(TownLeaveEvent event) {
-		if (FlagWarConfig.isAllowingAttacks()) {
+		if (Configuration.isAllowingAttacks()) {
 			if (FlagWar.isUnderAttack(event.getTown()) && TownySettings.isFlaggedInteractionTown()) {
 				event.setCancelled(true);
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));

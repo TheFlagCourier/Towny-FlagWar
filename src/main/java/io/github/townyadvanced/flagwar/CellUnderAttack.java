@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.townyadvanced.flagwar.util.FlagWarConfig;
+import io.github.townyadvanced.flagwar.util.Configuration;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -50,10 +50,10 @@ public class CellUnderAttack extends Cell {
 		beaconFlagBlocks = new ArrayList<Block>();
 		beaconWireframeBlocks = new ArrayList<Block>();
 
-		if (!FlagWarConfig.isDrawingBeacon())
+		if (!Configuration.isDrawingBeacon())
 			return;
 
-		int beaconSize = FlagWarConfig.getBeaconSize();
+		int beaconSize = Configuration.getBeaconSize();
 		if (Coord.getCellSize() < beaconSize)
 			return;
 
@@ -91,7 +91,7 @@ public class CellUnderAttack extends Cell {
 
 	private int getMinimumHeightForBeacon() {
 
-		return getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMinHeightAboveFlag();
+		return getTopOfFlagBlock().getY() + Configuration.getBeaconMinHeightAboveFlag();
 	}
 
 	private int getEdgeCount(int x, int y, int z, int outerEdge) {
@@ -107,16 +107,16 @@ public class CellUnderAttack extends Cell {
 	private Block getBeaconMinBlock(World world) {
 
 		int middle = (int) Math.floor(Coord.getCellSize() / 2.0);
-		int radiusCenterExpansion = FlagWarConfig.getBeaconRadius() - 1;
+		int radiusCenterExpansion = Configuration.getBeaconRadius() - 1;
 		int fromCorner = middle - radiusCenterExpansion;
 
 		int x = (getX() * Coord.getCellSize()) + fromCorner;
 		int z = (getZ() * Coord.getCellSize()) + fromCorner;
 
 		int maxY = world.getMaxHeight();
-		int y = getTopOfFlagBlock().getY() + FlagWarConfig.getBeaconMaxHeightAboveFlag();
+		int y = getTopOfFlagBlock().getY() + Configuration.getBeaconMaxHeightAboveFlag();
 		if (y > maxY) {
-			y = maxY - FlagWarConfig.getBeaconSize();
+			y = maxY - Configuration.getBeaconSize();
 		}
 
 		return world.getBlockAt(x, y, z);
@@ -134,7 +134,7 @@ public class CellUnderAttack extends Cell {
 
 	public boolean hasEnded() {
 
-		return flagColorId >= FlagWarConfig.getWoolColors().length;
+		return flagColorId >= Configuration.getWoolColors().length;
 	}
 
 	public void changeFlag() {
@@ -147,16 +147,16 @@ public class CellUnderAttack extends Cell {
 
 		loadBeacon();
 
-		flagBaseBlock.setType(FlagWarConfig.getFlagBaseMaterial());
+		flagBaseBlock.setType(Configuration.getFlagBaseMaterial());
 		updateFlag();
-		flagLightBlock.setType(FlagWarConfig.getFlagLightMaterial());
+		flagLightBlock.setType(Configuration.getFlagLightMaterial());
 		for (Block block : beaconWireframeBlocks)
-			block.setType(FlagWarConfig.getBeaconWireFrameMaterial());
+			block.setType(Configuration.getBeaconWireFrameMaterial());
 	}
 
 	public void updateFlag() {
 
-		Material[] woolColors = FlagWarConfig.getWoolColors();
+		Material[] woolColors = Configuration.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
 			
