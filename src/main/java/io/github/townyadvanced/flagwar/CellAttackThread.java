@@ -1,7 +1,5 @@
 package io.github.townyadvanced.flagwar;
 
-import io.github.townyadvanced.flagwar.CellUnderAttack;
-import io.github.townyadvanced.flagwar.FlagWar;
 import java.util.TimerTask;
 
 public class CellAttackThread extends TimerTask {

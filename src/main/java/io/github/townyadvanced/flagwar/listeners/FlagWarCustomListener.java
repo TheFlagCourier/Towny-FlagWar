@@ -36,11 +36,11 @@ import org.bukkit.event.Listener;
 
 public class FlagWarCustomListener implements Listener {
 
-	private final Towny plugin;
+	private final Towny towny;
 
 	public FlagWarCustomListener(Towny instance) {
 
-		plugin = instance;
+		towny = instance;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -59,7 +59,8 @@ public class FlagWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellDefendedEvent(CellDefendedEvent event) {
-		
+	  // TODO: Simplify! This shit is a cognitive mess.
+
 		if (event.isCancelled())
 			return;
 
@@ -75,7 +76,7 @@ public class FlagWarCustomListener implements Listener {
 		WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
 		universe.removeWarZone(worldCoord);
 
-		plugin.updateCache(worldCoord);
+		towny.updateCache(worldCoord);
 
 		String playerName;
 		if (player == null) {
@@ -87,31 +88,36 @@ public class FlagWarCustomListener implements Listener {
 				playerName = playerRes.getFormattedName();
 		}
 
-		plugin.getServer().broadcastMessage(Translation.of("msg_enemy_war_area_defended", playerName, cell.getCellString()));
+		towny.getServer().broadcastMessage(Translation.of(
+		    "msg_enemy_war_area_defended",
+        playerName,
+        cell.getCellString())
+    );
 
 		// Defender Reward
 		// It doesn't entirely matter if the attacker can pay.
 		// Also doesn't take into account of paying as much as the attacker can afford (Eg: cost=10 and balance=9).
 		if (TownySettings.isUsingEconomy()) {
 			try {
-				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
-				
+				Resident attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
+				Resident defendingPlayer = null;
+
 				// Should never happen
 				if (attackingPlayer == null)
 					return;
-				
+
 				if (player != null) {
 					defendingPlayer = universe.getResident(player.getUniqueId());
 				}
 
 				String formattedMoney = TownyEconomyHandler.getFormattedBalance(Configuration.getDefendedAttackReward());
 				if (defendingPlayer == null) {
-					if (attackingPlayer.getAccount().deposit(Configuration.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
-						try {
-							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
-						} catch (TownyException ignored) {
-						}
+					if (attackingPlayer.getAccount().deposit(Configuration.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)")) {
+            try {
+              TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
+            } catch (TownyException ignored) {
+            }
+          }
 				} else {
 					if (attackingPlayer.getAccount().payTo(Configuration.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
 						try {
@@ -132,7 +138,8 @@ public class FlagWarCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCellWonEvent(CellWonEvent event) {
-		
+	  // TODO: SIMPLIFY! This shit is cognitively complex.
+
 		if (event.isCancelled())
 			return;
 
@@ -141,11 +148,11 @@ public class FlagWarCustomListener implements Listener {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		try {
 			Resident attackingResident = universe.getResident(cell.getNameOfFlagOwner());
-			
+
 			// Shouldn't happen
 			if (attackingResident == null)
 				return;
-			
+
 			Town attackingTown = attackingResident.getTown();
 			Nation attackingNation = attackingTown.getNation();
 
@@ -208,13 +215,13 @@ public class FlagWarCustomListener implements Listener {
 					te.printStackTrace();
 				}
 			} else {
-				
+
 				TownyMessaging.sendPrefixedTownMessage(attackingTown, Translation.of("msg_war_defender_keeps_claims"));
 				TownyMessaging.sendPrefixedTownMessage(defendingTown, Translation.of("msg_war_defender_keeps_claims"));
 			}
 
 			// Cleanup
-			plugin.updateCache(worldCoord);
+			towny.updateCache(worldCoord);
 
 			// Event Message
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
@@ -250,11 +257,11 @@ public class FlagWarCustomListener implements Listener {
 
 		WorldCoord worldCoord = new WorldCoord(cell.getWorldName(), cell.getX(), cell.getZ());
 		universe.removeWarZone(worldCoord);
-		plugin.updateCache(worldCoord);
+		towny.updateCache(worldCoord);
 
 		System.out.println(cell.getCellString());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownLeaveNation(NationPreTownLeaveEvent event) {
 		if (Configuration.isAllowingAttacks()) {
@@ -262,14 +269,14 @@ public class FlagWarCustomListener implements Listener {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_town_under_attack"));
 				event.setCancelled(true);
 			}
-	
+
 			if (System.currentTimeMillis() - FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 				event.setCancelled(true);
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onNationWithdraw(NationPreTransactionEvent event) {
 		if (Configuration.isAllowingAttacks() && TownySettings.isFlaggedInteractionNation() && event.getTransaction().getType() == TransactionType.WITHDRAW) {
@@ -290,7 +297,7 @@ public class FlagWarCustomListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownSetHomeBlock(TownPreSetHomeBlockEvent event) {
 		if (Configuration.isAllowingAttacks()) {
@@ -303,7 +310,6 @@ public class FlagWarCustomListener implements Listener {
 			if (System.currentTimeMillis()- FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
 				event.setCancelled(true);
-				return;
 			}
 
 		}
@@ -322,7 +328,7 @@ public class FlagWarCustomListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onTownLeave(TownLeaveEvent event) {
 		if (Configuration.isAllowingAttacks()) {
@@ -335,7 +341,6 @@ public class FlagWarCustomListener implements Listener {
 			if (System.currentTimeMillis()- FlagWar.lastFlagged(event.getTown()) < TownySettings.timeToWaitAfterFlag()) {
 				event.setCancelled(true);
 				event.setCancelMessage(Translation.of("msg_war_flag_deny_recently_attacked"));
-				return;
 			}
 		}
 	}

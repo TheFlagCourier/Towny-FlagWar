@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "com.github.johnrengelman.shadow" version "6.1.0"
+    id "org.ec4j.editorconfig" version "0.0.3"
 }
 
 group = 'io.github.townyadvanced.flagwar'
@@ -48,7 +49,7 @@ java {
 }
 
 shadowJar {
-    relocate 'de.leonhard.storage', 'io.github.townyadvanced.flagwar.libs.simplixstorage'
+    relocate 'de.leonhard.storage', 'io.github.townyadvanced.flagwar.libs.storage'
     minimize()
 }
 

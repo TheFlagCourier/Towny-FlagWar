@@ -1,15 +1,14 @@
 package io.github.townyadvanced.flagwar.util;
 
-import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
 import de.leonhard.storage.Toml;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
 public class Configuration {
 
-	private static final Toml conf = new Toml("config.toml","");
+  private static final Toml conf = new Toml("config.toml","");
 
 	protected static final Material[] woolColors = new Material[] {
 			Material.LIME_WOOL, Material.GREEN_WOOL, Material.BLUE_WOOL, Material.CYAN_WOOL,
@@ -19,14 +18,59 @@ public class Configuration {
 	private static Material flagBaseMaterial = null;
 	private static Material flagLightMaterial = null;
 	private static Material beaconWireFrameMaterial = null;
+  public static final String CONFIG_VERSION = "0.1";
 
-	private Configuration() {
+  private Configuration() {
 		// Utility class, mask implicit public constructor.
 	}
 
+  /**
+   * Builds the initial configuration file, and populates it.
+   * If a file already exists, but a key is missing, that key will be added to the file.
+   */
+  public static void generateInitialConfig() {
+	  // Builds the initial configuration, or updates configuration files
+    // TODO: Use builder to write to file ONCE. Currently, every value is a new write.
+    // TODO: Also, check if there's a way to add comments programaticaly.
+    conf.setDefault("config-version", CONFIG_VERSION);
+
+	  conf.setDefault("beacon.draw", true);
+	  conf.setDefault("beacon.radius", 3);
+    conf.setDefault("beacon.height-above-flag.min", 3);
+    conf.setDefault("beacon.height-above-flag.max", 64);
+
+    conf.setDefault("rule.allow-attacks", true);
+    conf.setDefault("rule.flag-waiting-time", 50000L);
+    conf.setDefault("rule.attack.borders-only", true);
+    conf.setDefault("rule.attack.take-ownership", true);
+    conf.setDefault("rule.min-players-online.town", 4);
+    conf.setDefault("rule.min-players-online.nation", 3);
+    conf.setDefault("rule.max-active-flags-per-player", 1);
+
+    conf.setDefault("economy.won.town-block", 10.00);
+    conf.setDefault("economy.won.home-block", 100.00);
+    conf.setDefault("economy.flag.attack", 10.00);
+    conf.setDefault("economy.flag.defend", 10.00);
+  }
+
+  /**
+   * Not currently useful, but used to remove any legacy keys from previous configuration versions.
+   */
+  public static void removeOldKeys() {
+    if (conf.contains("example.key"))
+      conf.remove("example.key");
+  }
+
+  public static void updateConfVersion() {
+	  conf.set("config-version", CONFIG_VERSION);
+  }
+
 	public static boolean isAffectedMaterial(Material material) {
 
-		return Tag.WOOL.isTagged(material) || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
+		return Tag.WOOL.isTagged(material) ||
+      material == getFlagBaseMaterial() ||
+      material == getFlagLightMaterial() ||
+      material == getBeaconWireFrameMaterial();
 	}
 
 	public static Material[] getWoolColors() {
@@ -36,14 +80,14 @@ public class Configuration {
 
 	public static boolean isAllowingAttacks() {
 		// Default to false for testing purposes.
-		return conf.getOrDefault("allow-attacks", false);
+		return conf.getBoolean("rule.allow-attacks");
 		//return TownySettings.getBoolean(ConfigNodes.WAR_ENEMY_ALLOW_ATTACKS);
 	}
 
 	public static long getFlagWaitingTime() {
 		// Default to 50000L for testing
-		// TODO: Port TimeTools? Keep using it? Or use a different (agnostic) library?
-		return TimeTools.convertToTicks(conf.getOrDefault("flag.waiting-time", 50000L));
+		// Note: Port TimeTools? Keep using it? Or use a different (agnostic) library?
+		return TimeTools.convertToTicks(conf.getLong("rule.flag-waiting-time"));
 		//return TimeTools.convertToTicks(TownySettings.getSeconds(ConfigNodes.WAR_ENEMY_FLAG_WAITING_TIME));
 	}
 

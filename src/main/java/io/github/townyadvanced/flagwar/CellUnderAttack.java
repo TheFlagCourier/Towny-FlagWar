@@ -16,7 +16,9 @@ public class CellUnderAttack extends Cell {
 	private String nameOfFlagOwner;
 	private List<Block> beaconFlagBlocks;
 	private List<Block> beaconWireframeBlocks;
-	private Block flagBaseBlock, flagBlock, flagLightBlock;
+	private Block flagBaseBlock;
+	private Block flagBlock;
+	private Block flagLightBlock;
 	private int flagColorId;
 	private int thread;
 	private long timeBetweenColorChange;
@@ -27,7 +29,7 @@ public class CellUnderAttack extends Cell {
 	 * @param plugin Instance of {@link Towny}
 	 * @param nameOfFlagOwner Name of the Resident that placed the flag
 	 * @param flagBaseBlock Flag representing the "flag pole" of the block
-	 * @param timeBetweenColorChange Time (as a long) between color shifting the flag and beacon.   
+	 * @param timeBetweenColorChange Time (as a long) between color shifting the flag and beacon.
 	 */
 	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock, long timeBetweenColorChange) {
 
@@ -41,14 +43,14 @@ public class CellUnderAttack extends Cell {
 		World world = flagBaseBlock.getWorld();
 		this.flagBlock = world.getBlockAt(flagBaseBlock.getX(), flagBaseBlock.getY() + 1, flagBaseBlock.getZ());
 		this.flagLightBlock = world.getBlockAt(flagBaseBlock.getX(), flagBaseBlock.getY() + 2, flagBaseBlock.getZ());
-		
+
 		this.timeBetweenColorChange = timeBetweenColorChange;
 	}
 
 	public void loadBeacon() {
 
-		beaconFlagBlocks = new ArrayList<Block>();
-		beaconWireframeBlocks = new ArrayList<Block>();
+		beaconFlagBlocks = new ArrayList<>();
+		beaconWireframeBlocks = new ArrayList<>();
 
 		if (!Configuration.isDrawingBeacon())
 			return;
@@ -66,6 +68,7 @@ public class CellUnderAttack extends Cell {
 	}
 
 	private void beaconLooper(int beaconSize, Block minBlock, int outerEdge) {
+	  // Could probably simplify this, or at least make it easier to read.
 		for (int y = 0; y < beaconSize; y++) {
 			for (int z = 0; z < beaconSize; z++) {
 				for (int x = 0; x < beaconSize; x++) {
@@ -159,12 +162,12 @@ public class CellUnderAttack extends Cell {
 		Material[] woolColors = Configuration.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
-			
+
 			flagBlock.setType(woolColors[flagColorId]);
-			
+
 			for (Block block : beaconFlagBlocks)
 				block.setType(woolColors[flagColorId]);
-			
+
 		}
 	}
 
@@ -182,7 +185,13 @@ public class CellUnderAttack extends Cell {
 	public void begin() {
 
 		drawFlag();
-		thread = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new CellAttackThread(this), this.timeBetweenColorChange, this.timeBetweenColorChange);
+		//TODO: Replace this - scheduleSyncRpeatingTask is deprecated.
+		thread = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
+		    plugin,
+        new CellAttackThread(this),
+        this.timeBetweenColorChange,
+        this.timeBetweenColorChange
+    );
 	}
 
 	public void cancel() {

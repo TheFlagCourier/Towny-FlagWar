@@ -1,14 +1,13 @@
 package io.github.townyadvanced.flagwar;
 
 import com.palmergames.bukkit.towny.object.Coord;
-import io.github.townyadvanced.flagwar.CellUnderAttack;
-import io.github.townyadvanced.flagwar.FlagWar;
 import org.bukkit.Location;
 
 public class Cell {
 
 	private String worldName;
-	private int x, z;
+	private int x;
+	private int z;
 
 	public Cell(String worldName, int x, int z) {
 

@@ -19,9 +19,9 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
 public class FlagWarBlockListener implements Listener {
-	
-	private Towny towny;
-	
+
+	private final Towny towny;
+
 	public FlagWarBlockListener(Towny towny) {
 
 		this.towny = towny;
@@ -31,13 +31,13 @@ public class FlagWarBlockListener implements Listener {
 	public void onFlagWarFlagPlace(TownyBuildEvent event) {
 		if (event.getTownBlock() == null)
 			return;
-		
+
 		if (!(Configuration.isAllowingAttacks() && event.getMaterial() == Configuration.getFlagBaseMaterial()))
 			return;
 		Player player = event.getPlayer();
 		Block block = player.getWorld().getBlockAt(event.getLocation());
 		WorldCoord worldCoord = new WorldCoord(block.getWorld().getName(), Coord.parseCoord(block));
-		
+
 		if (towny.getCache(player).getStatus() == TownBlockStatus.ENEMY)
 			try {
 				if (FlagWar.callAttackCellEvent(towny, player, block, worldCoord))
@@ -46,7 +46,7 @@ public class FlagWarBlockListener implements Listener {
 				event.setMessage(e.getMessage());
 			}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 
@@ -66,12 +66,12 @@ public class FlagWarBlockListener implements Listener {
 			FlagWar.checkBlock(null, block, event);
 	}
 
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 
 		if (event.isSticky()) {
-			
+
 			for (Block block : event.getBlocks())
 				FlagWar.checkBlock(null, block, event);
 		}

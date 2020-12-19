@@ -56,8 +56,12 @@ public class FlagWar extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		//initialize configuration
-		//TODO: Initialize Configuration
+		//Initialize configuration
+    Configuration.generateInitialConfig();
+    //Purge any old (removed) config keys
+    Configuration.removeOldKeys();
+    //Update Config Version Key
+    Configuration.updateConfVersion();
 
 		//Initialize Locale
 		Localization localization = new Localization("en-US");
