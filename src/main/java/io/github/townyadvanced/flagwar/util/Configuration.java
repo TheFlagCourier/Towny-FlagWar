@@ -2,7 +2,6 @@ package io.github.townyadvanced.flagwar.util;
 
 import com.palmergames.util.TimeTools;
 import de.leonhard.storage.Toml;
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
