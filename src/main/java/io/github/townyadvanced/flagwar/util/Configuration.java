@@ -30,7 +30,7 @@ public class Configuration {
   public static void generateInitialConfig() {
 	  // Builds the initial configuration, or updates configuration files
     // TODO: Use builder to write to file ONCE. Currently, every value is a new write.
-    // TODO: Also, check if there's a way to add comments programaticaly.
+    // TODO: Also, check if there's a way to add comments programmatically.
     conf.setDefault("config-version", CONFIG_VERSION);
 
 	  conf.setDefault("beacon.draw", true);
@@ -39,7 +39,7 @@ public class Configuration {
     conf.setDefault("beacon.height-above-flag.max", 64);
 
     conf.setDefault("rule.allow-attacks", true);
-    conf.setDefault("rule.flag-waiting-time", 50000L);
+    conf.setDefault("rule.flag-waiting-time", 50000); //TODO: Get current value from towny, use it!
     conf.setDefault("rule.attack.borders-only", true);
     conf.setDefault("rule.attack.take-ownership", true);
     conf.setDefault("rule.min-players-online.town", 4);
