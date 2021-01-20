@@ -1,5 +1,10 @@
 # _Flag War_
 
+## Notice: Archived, Pending Deletion
+
+I have decided to scrap this repository in favor of a fresh re-forking, to preserve git blame & history.
+This repository is only staying up as personal reference, and does not create a working binary object.
+
 ## About _Flag War_
 
 _Flag&nbsp;War_ is a TownyAdvanced project, and was formerly included within the main plugin, _Towny_.
